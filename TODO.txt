@@ -1,0 +1,3 @@
+- Commit to GitHub
+- Merge a week's worth of data into one data frame
+- Write code to identify days of the week

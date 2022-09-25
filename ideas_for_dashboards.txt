@@ -1,0 +1,7 @@
+Frequency of documents that were accessed each week
+Which IPs accessed files most often over a certain week
+Count of location data of IPs per country
+Traffic on weekdays compared to weekends
+Count of types of files that were accessed
+What times of days are more file access requests made?
+Which files returned 404 errors most often?
