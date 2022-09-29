@@ -1,3 +1,4 @@
-- Commit to GitHub
-- Merge a week's worth of data into one data frame
 - Write code to identify days of the week
+- Periods of the day
+- File types
+- Translate Apache log codes
