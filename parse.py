@@ -8,9 +8,11 @@ dataset['datetime'] = pd.to_datetime(dataset['date'] + dataset['time'], format =
 #drop old date and time fields and reorder dataset
 to_drop = ['date', 'time']
 dataset.drop(to_drop, inplace=True, axis=1)
-dataset = dataset['ip', 'datetime', 'cik', 'accession', 'extention', 'code', 'size', 'find', 'crawler']
+dataset = dataset[['ip', 'datetime', 'cik', 'accession', 'extention', 'code', 'size', 'find', 'crawler']]
 
-#date_series = dataset.loc[:, 'datetime']
-#dataset.assign(DayOfWeek = date_series.dt.day_name)
+date_series = dataset.loc[:, 'datetime']
+date_series = date_series.dt.day_name
+print(date_series)
+#dataset.assign(DayOfWeek = date_series)
 
-print(dataset.head)
+#print(dataset.head())
