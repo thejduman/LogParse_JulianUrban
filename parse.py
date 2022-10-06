@@ -10,9 +10,8 @@ to_drop = ['date', 'time']
 dataset.drop(to_drop, inplace=True, axis=1)
 dataset = dataset[['ip', 'datetime', 'cik', 'accession', 'extention', 'code', 'size', 'find', 'crawler']]
 
-date_series = dataset.loc[:, 'datetime']
-date_series = date_series.dt.day_name
-print(date_series)
-#dataset.assign(DayOfWeek = date_series)
+date_series = dataset.loc[:, 'datetime'] #create new series containing datetime values
+date_series = date_series.dt.day_name() #find day of week for each datetime value in series
+dataset = dataset.assign(dayofweek = date_series) #add the series to the dataset
 
-#print(dataset.head())
+print(dataset.head())
