@@ -1,4 +1,4 @@
-- Write code to identify days of the week
 - Periods of the day
-- File types
 - Translate Apache log codes
+- Randomize last octets of ips from 2-255
+- Integrate IP API

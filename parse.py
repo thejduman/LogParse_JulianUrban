@@ -17,9 +17,10 @@ date_series = date_series.dt.day_name() #find day of week for each datetime valu
 dataset = dataset.assign(dayofweek = date_series) #add the series to the dataset
 
 #early morning
-#early_morning_start = time(0, 0, 0)
-#early_morning_end = time(5, 59, 59)
-#is_early_morning = (dataset['datetime'].dt.time > early_morning_start) & (dataset['datetime'].dt.time < early_morning_end)
+#night_start = time(0, 0, 0)
+#night_end = time(5, 59, 59)
+#is_night = (dataset['datetime'].dt.time > night_start) & (dataset['datetime'].dt.time < night_end)
+#print(is_night.head())
 #morning
 #morning_start = time(6, 0, 0)
 #morning_end = time(11, 59, 59)
@@ -35,11 +36,12 @@ dataset = dataset.assign(dayofweek = date_series) #add the series to the dataset
 
 #assign data to columns
 #dataset['timeofday'] = ''
-#dataset.loc[is_early_morning, 'timeofday'] = 'Early Morning'
+#dataset.loc[is_night, 'timeofday'] = 'Night'
+#print(dataset['timeofday'])
 #dataset.loc[is_morning, 'timeofday'] = 'Morning'
 #dataset.loc[is_afternoon, 'timeofday'] = 'Afternoon'
 #dataset.loc[is_evening, 'timeofday'] = 'Evening'
 
 dataset['extension'] = dataset['doc'].str.extract("(\.[0-9a-z]+$)") #extract file extensions from file names
 
-print(dataset.head())
+print(dataset.tail())
