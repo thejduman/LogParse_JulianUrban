@@ -1,6 +1,7 @@
 import pandas as pd
-import pytz
-from datetime import datetime, time
+import random
+import numpy as np
+#from datetime import datetime, time
 
 print("Loading CSV file...")
 dataset = pd.read_csv('..\data\log20140403.csv') #import the dataset for 2014-04-03
@@ -22,16 +23,16 @@ date_series = date_series.dt.day_name() #find day of week for each datetime valu
 dataset = dataset.assign(dayofweek = date_series) #add the series to the dataset
 
 print("Adding time of day column...")
-hours = dataset['datetime'].dt.hour
+hours = dataset['datetime'].dt.hour #extract hours from datetime field
 timeofday = []
-for x in hours:
+for x in hours: #loop to select time of day
     if (x > 0) & (x < 6): #night = 00:00-06:00
         timeofday.append("Night")
     elif (x > 6) & (x < 12): #morning = 06:00-12:00
         timeofday.append("Morning")
     elif (x > 12) & (x < 18): #afternoon = 12:00-18:00
         timeofday.append("Afternoon")
-    elif (x > 18) & (x < 24): #night = 18:00-00:00 (24 doesn't exist)
+    elif (x > 18) & (x < 24): #evening = 18:00-00:00 (24 doesn't exist)
         timeofday.append("Evening")
 timeofday_series = pd.Series(timeofday)
 dataset['timeofday'] = timeofday_series
@@ -66,6 +67,42 @@ dataset['timeofday'] = timeofday_series
 print("Adding file extension column...")
 dataset['extension'] = dataset['doc'].str.extract("(\.[0-9a-z]+$)") #extract file extensions from file names
 
+print("Randomizing last octet of IP addresses...")
+#for x in dataset.iterrows():
+n = str(random.randrange(2, 255)) #generate random numbers for last octet
+#n = np.random.randint(2, 255, len(dataset.index))
+#dataset['ip'] = dataset['ip'].str.replace("([a-z]{3})", str(n)) #only picking one number, might need to loop
+dataset['ip'].replace(regex="([a-z]{3})", value=n, inplace=True)
+
+print("Adding column for translated HTTP log codes...")
+codes = dataset['code']
+http = []
+for x in codes:
+    if x == 200:
+        http.append("OK")
+    elif x == 206:
+        http.append("Partial Content")
+    elif x == 301:
+        http.append("Moved Permanently")
+    elif x == 304:
+        http.append("Not Modified")
+    elif x == 400:
+        x = http.append("Bad Request")
+    elif x == 403:
+        http.append("Forbidden")
+    elif x == 404:
+        http.append("Not Found")
+    elif x == 500:
+        http.append("Internal Server Error")
+    elif x == 503:
+        http.append("Service Unavailable")
+    elif x == 504:
+        http.append("Gateway Timeout")
+http_series = pd.Series(http)
+dataset['http'] = http_series
+
 print("The dataset is ready.")
 print(dataset.head())
 print(dataset.tail())
+#print(dataset['ip'])
+print(dataset['timeofday'].unique())

@@ -15,9 +15,19 @@ def ts():
     print(is_night)
 
 def seriescase():
-    seriestest = pd.date_range(start="2022-10-10 03:00", end="2022-10-11 00:00", periods=10)
-    a = seriestest.hour
-    print(a)
+    timevals = ['2022-10-10 03:00:00', '2022-10-10 05:20:00',
+       '2022-10-10 07:40:00', '2022-10-10 10:00:00',
+       '2022-10-10 12:20:00', '2022-10-10 14:40:00',
+       '2022-10-10 17:00:00', '2022-10-10 19:20:00',
+       '2022-10-10 21:40:00', '2022-10-11 00:00:00']
+    #seriestest = pd.date_range(start="2022-10-10 03:00", end="2022-10-11 00:00", periods=10)
+    #print(seriestest)
+    timeseries = pd.Series(timevals)
+    datetimeseries = pd.to_datetime(timeseries, format = "%Y-%m-%d %H:%M:%S")
+    print(datetimeseries)
+    a = datetimeseries.dt.hour
+    #hourseries = pd.Series(a)
+    #print(hourseries)
     #night_start = time(0, 0, 0)
     #night_end = time(5, 59, 59)
     timeofday = []
