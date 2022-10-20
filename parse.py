@@ -34,6 +34,8 @@ for x in hours: #loop to select time of day
         timeofday.append("Afternoon")
     elif (x > 18) & (x < 24): #evening = 18:00-00:00 (24 doesn't exist)
         timeofday.append("Evening")
+    else:
+        timeofday.append("No Value")
 timeofday_series = pd.Series(timeofday)
 dataset['timeofday'] = timeofday_series
 
