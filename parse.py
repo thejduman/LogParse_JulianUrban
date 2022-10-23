@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-import numpy as np
+import api
 #from datetime import datetime, time
 
 print("Loading CSV file...")
@@ -103,8 +103,12 @@ for x in codes:
 http_series = pd.Series(http)
 dataset['http'] = http_series
 
+print("Getting location data for IP addresses...")
+ips = dataset['ip'].loc[0:99]
+print(api.apiCall(ips))
+
 print("The dataset is ready.")
 print(dataset.head())
 print(dataset.tail())
-#print(dataset['ip'])
-print(dataset['timeofday'].unique())
+print(dataset['ip'])
+#print(dataset['timeofday'].unique())
