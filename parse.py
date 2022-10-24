@@ -1,5 +1,8 @@
+from optparse import Values
+from typing import Final
 import pandas as pd
 import random
+import re
 import api
 #from datetime import datetime, time
 
@@ -105,7 +108,11 @@ dataset['http'] = http_series
 
 print("Getting location data for IP addresses...")
 ips = dataset['ip'].loc[0:99]
-print(api.apiCall(ips))
+arrayjson = ips.to_json(orient='values')
+array = api.jprint(arrayjson)
+valarray = re.search("([0-9]{1,3}\.){3}[0-9]{1,3}", array)
+print(valarray)
+#print(api.apiCall(ips))
 
 print("The dataset is ready.")
 print(dataset.head())
