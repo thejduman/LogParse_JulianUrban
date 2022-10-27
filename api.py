@@ -8,10 +8,16 @@ def jprint(obj): #original function to get a JSON dump from a response
     text = json.dumps(obj, sort_keys=True)
     return text
 
-#def batch(series):
-    
+def batch(obj): #get a response from a JSON array of up to 100 IP addresses
+    response = requests.post("http://ip-api.com/batch?fields=regionName", json = obj) #pass in the IPs
+    data = response.json() #returns a list of dictionaries
+    #print(type(data))
+    regionList = []
+    for x in data: #get a list of only the values
+        regionList.append(x["regionName"])
+    return regionList
 
-def apiCall(series): #function to pass in an IP and get the regionName
+def apiCall(series): #An attempt at looping through IP values to get responses. This method has bugs and should not be used. The batch function is more efficient at passing in multiple values and should be used instead.
     rl = 45
     locList = []
     for ip in series:
@@ -43,7 +49,7 @@ def apiCall(series): #function to pass in an IP and get the regionName
     #    time.sleep(int(response.headers.get('x-Ttl')))
     #    apiCall(ip)
 
-def singleValue(ip):
+def singleValue(ip): #function for passing in a single IP value to get the regionName
     response = requests.get("http://ip-api.com/json/" + ip + "?fields=regionName") #pass in IP value to API URL
     data = response.json() #get response
     print(data)

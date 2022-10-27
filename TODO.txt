@@ -1,9 +1,5 @@
-- Integrate IP API
-Goal: get regionName for each IP address in the ip column of dataframe
-Steps to take:
-- Create a function that allows me to pass in an IP value to get an API response
-- Create a test dataframe of ip addresses
-- Create a loop to get the regionName
-    - Check X-Rl to see if a request can be made
-    - If so, make an API request with the current IP address
-    - Else, wait until X-ttl == 0
+ - Get more responses for more IPs in the dataset
+    - Probably no more than 10 responses (1000 IP addresses)
+- JavaScript tutorial
+- Working on front end visualization with D3
+- If extra time: add true randomness to last octets of IP addresses

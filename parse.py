@@ -37,52 +37,26 @@ for x in hours: #loop to select time of day
         timeofday.append("Afternoon")
     elif (x > 18) & (x < 24): #evening = 18:00-00:00 (24 doesn't exist)
         timeofday.append("Evening")
-    else:
-        timeofday.append("No Value")
+    #else: #causing all values to be "No Value", will re-add and debug if absolutely necessary
+    #    timeofday.append("No Value")
 timeofday_series = pd.Series(timeofday)
 dataset['timeofday'] = timeofday_series
-
-
-#night
-#night_start = time(0, 0, 0)
-#night_end = time(5, 59, 59)
-#is_night = (dataset['datetime'].dt.time() > night_start) & (dataset['datetime'].dt.time() < night_end)
-#print(is_night.head())
-#morning
-#morning_start = time(6, 0, 0)
-#morning_end = time(11, 59, 59)
-#is_morning = (dataset['datetime'].dt.time > morning_start) & (dataset['datetime'].dt.time < morning_end)
-#afternoon
-#afternoon_start = time(12, 0, 0)
-#afternoon_end = time(17, 59, 59)
-#is_afternoon = (dataset['datetime'].dt.time > afternoon_start) & (dataset['datetime'].dt.time < afternoon_end)
-#evening
-#evening_start = time(18, 0, 0)
-#evening_end = time(23, 59, 59)
-#is_evening = (dataset['datetime'].dt.time > evening_start) & (dataset['datetime'].dt.time < evening_end)
-
-#assign data to columns
-#dataset['timeofday'] = ''
-#dataset.loc[is_night, 'timeofday'] = 'Night'
-#print(dataset['timeofday'])
-#dataset.loc[is_morning, 'timeofday'] = 'Morning'
-#dataset.loc[is_afternoon, 'timeofday'] = 'Afternoon'
-#dataset.loc[is_evening, 'timeofday'] = 'Evening'
 
 print("Adding file extension column...")
 dataset['extension'] = dataset['doc'].str.extract("(\.[0-9a-z]+$)") #extract file extensions from file names
 
-print("Randomizing last octet of IP addresses...")
+print("Randomizing last octet of IP addresses...") #Not truly random, will attempt to add true randomness if there is extra time
+#pass the ip values to a list, iterate through the list and add a random number to the last octet using regex
 #for x in dataset.iterrows():
 n = str(random.randrange(2, 255)) #generate random numbers for last octet
 #n = np.random.randint(2, 255, len(dataset.index))
-#dataset['ip'] = dataset['ip'].str.replace("([a-z]{3})", str(n)) #only picking one number, might need to loop
+#dataset['ip'] = dataset['ip'].str.replace("([a-z]{3})", str(n)) #this line but with a list of ips instead of the actual field
 dataset['ip'].replace(regex="([a-z]{3})", value=n, inplace=True)
 
 print("Adding column for translated HTTP log codes...")
-codes = dataset['code']
+codes = dataset['code'] #pass the code field into a list for easier parsing
 http = []
-for x in codes:
+for x in codes: #append values to the http list for each possible HTTP log code
     if x == 200:
         http.append("OK")
     elif x == 206:
@@ -103,19 +77,17 @@ for x in codes:
         http.append("Service Unavailable")
     elif x == 504:
         http.append("Gateway Timeout")
-http_series = pd.Series(http)
-dataset['http'] = http_series
+http_series = pd.Series(http) #convert the list to a series
+dataset['http'] = http_series #add the list to the dataset as a new column
 
 print("Getting location data for IP addresses...")
-ips = dataset['ip'].loc[0:99]
-arrayjson = ips.to_json(orient='values')
-array = api.jprint(arrayjson)
-valarray = re.search("([0-9]{1,3}\.){3}[0-9]{1,3}", array)
-print(valarray)
-#print(api.apiCall(ips))
+ips = dataset['ip'].loc[0:99].to_list() #get a list of ip addresses
+array = api.jprint(ips) #convert the ip list to json
+ip_series = pd.Series(api.batch(ips)) #get an API response for the list of IP values and assign it to a new series
+dataset['region'] = ip_series #add the series to the dataset as the region column
 
 print("The dataset is ready.")
 print(dataset.head())
-print(dataset.tail())
-print(dataset['ip'])
+#print(dataset.tail())
+#print(dataset['ip'])
 #print(dataset['timeofday'].unique())
