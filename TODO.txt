@@ -1,4 +1,4 @@
- - Get more responses for more IPs in the dataset
+- Get more responses for more IPs in the dataset
     - Probably no more than 10 responses (1000 IP addresses)
 - JavaScript tutorial
 - Working on front end visualization with D3

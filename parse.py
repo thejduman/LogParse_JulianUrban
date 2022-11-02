@@ -1,8 +1,7 @@
-from optparse import Values
-from typing import Final
+#dataset URL: http://www.sec.gov/dera/data/Public-EDGAR-log-file-data/2014/Qtr2/log20140403.zip
 import pandas as pd
 import random
-import re
+import matplotlib.pyplot as plt
 import api
 #from datetime import datetime, time
 
@@ -87,7 +86,32 @@ ip_series = pd.Series(api.batch(ips)) #get an API response for the list of IP va
 dataset['region'] = ip_series #add the series to the dataset as the region column
 
 print("The dataset is ready.")
-print(dataset.head())
+#print(dataset.head())
 #print(dataset.tail())
 #print(dataset['ip'])
 #print(dataset['timeofday'].unique())
+
+#Pie chart of which IPs accessed files most often across the day
+x1 = dataset['ip'].value_counts()[:10]
+pielabels = dataset['ip'].value_counts()[:10].index.to_list()
+plt.pie(x1, labels=pielabels)
+plt.title("IP Addresses with the Most Traffic to the Server")
+plt.show()
+
+#Bar chart of number of requests made during each time of day
+x2 = dataset['timeofday'].value_counts(sort=False).index.to_list()
+y2 = dataset['timeofday'].value_counts(sort=False)
+plt.bar(x2, y2)
+plt.title("Requests Made During Each Time of Day")
+plt.xlabel("Time of day")
+plt.ylabel("Number of requests made to server (in millions)")
+plt.show()
+
+#Bar chart of most frewuently accessed file types
+x3 = dataset['extension'].value_counts()[:5].index.to_list()
+y3 = dataset['extension'].value_counts()[:5]
+plt.bar(x3, y3)
+plt.title("File Types of the Most Frequently Accessed Files")
+plt.xlabel("File type")
+plt.ylabel("Number of requests for type of file (in millions)")
+plt.show()
